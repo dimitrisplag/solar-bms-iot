@@ -67,7 +67,6 @@
 
 <!-- Εισαγωγή της βιβλιοθήκης Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <script>
     // Παίρνουμε τα δεδομένα από το Django
     const labels = JSON.parse('{{ timestamps|safe }}');
@@ -77,11 +76,10 @@
     const socData = JSON.parse('{{ soc_data|safe }}');
     const sohData = JSON.parse('{{ soh_data|safe }}');
     
-// 2. Ρυθμίσεις για το Dark Theme
+    // 2. Ρυθμίσεις για το Dark Theme
     Chart.defaults.color = '#E0E0E0'; 
     Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.1)'; 
-
-    // 3. Ζωγραφίζουμε τα 5 μικρά γραφήματα
+    // 3. Tα 5 μικρά γραφήματα
     new Chart(document.getElementById('voltageChart').getContext('2d'), {
         type: 'line', data: { labels: labels, datasets: [{ label: 'Τάση (Voltage V)', data: voltageData, borderColor: '#3273F6', backgroundColor: 'rgba(50, 115, 246, 0.2)', borderWidth: 2, fill: true, tension: 0.4 }] }
     });
@@ -102,16 +100,14 @@
         type: 'line', data: { labels: labels, datasets: [{ label: 'State of Health (SoH %)', data: sohData, borderColor: '#9B59B6', backgroundColor: 'rgba(155, 89, 182, 0.2)', borderWidth: 2, fill: true, tension: 0.4 }] }, options: { scales: { y: { min: 0, max: 100 } } }
     });
 
-    // 4. Λειτουργία Pop-up (Modal)
+    // 4.Pop-up (Modal)
     let modalChartInstance = null;
 
     function openModal(chartType) {
         document.getElementById('chartModal').style.display = 'flex';
-        
         if (modalChartInstance) {
             modalChartInstance.destroy(); // Καθαρίζει το προηγούμενο γράφημα
         }
-
         let mLabel, mData, mBorder, mBg, isPercentage = false;
 
         // Επιλογή χρωμάτων και δεδομένων ανάλογα με το κλικ
