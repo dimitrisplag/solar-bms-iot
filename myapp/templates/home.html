@@ -45,11 +45,9 @@
         </div>
     </div>
     <div class="charts-row-2">
-        <!-- Γράφημα: SoC (%) -->
         <div class="card dashboard-card clickable-card" onclick="openModal('soc')">
             <canvas id="socChart"></canvas>
         </div>
-        <!-- Γράφημα: SoH (%) -->
         <div class="card dashboard-card clickable-card" onclick="openModal('soh')">
             <canvas id="sohChart"></canvas>
         </div>
@@ -65,10 +63,9 @@
     </div>
 </div>
 
-<!-- Εισαγωγή της βιβλιοθήκης Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // Παίρνουμε τα δεδομένα από το Django
+    // Δεδομένα από το Django
     const labels = JSON.parse('{{ timestamps|safe }}');
     const voltageData = JSON.parse('{{ voltage_data|safe }}');
     const currentData = JSON.parse('{{ current_data|safe }}');
@@ -76,10 +73,9 @@
     const socData = JSON.parse('{{ soc_data|safe }}');
     const sohData = JSON.parse('{{ soh_data|safe }}');
     
-    // 2. Ρυθμίσεις για το Dark Theme
     Chart.defaults.color = '#E0E0E0'; 
     Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.1)'; 
-    // 3. Tα 5 μικρά γραφήματα
+    //Tα 5 μικρά γραφήματα
     new Chart(document.getElementById('voltageChart').getContext('2d'), {
         type: 'line', data: { labels: labels, datasets: [{ label: 'Τάση (Voltage V)', data: voltageData, borderColor: '#3273F6', backgroundColor: 'rgba(50, 115, 246, 0.2)', borderWidth: 2, fill: true, tension: 0.4 }] }
     });
@@ -130,8 +126,7 @@
             modalChartInstance.destroy();
         }
     }
-
-    // Κλείνει το modal αν κάνεις κλικ στο σκοτεινό φόντο
+    
     window.onclick = function(event) {
         if (event.target === document.getElementById('chartModal')) {
             closeModal();
