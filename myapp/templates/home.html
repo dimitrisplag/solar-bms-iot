@@ -44,14 +44,35 @@
             <canvas id="tempChart"></canvas>
         </div>
     </div>
+<<<<<<< HEAD
+    <div class="charts-row-3"> 
+        <div class="card dashboard-card clickable-card kpi-card" onclick="openModal('soc')" title="Κλικ για γράφημα">
+            <div class="chart-label">State of Charge (SoC)</div>
+            <div id="socValue" class="display-number text-success">--%</div>
+            <div class="progress-bar-bg">
+                <div id="socBar" class="progress-bar-fill" style="background-color: #2ECC71; width: 0%;"></div>
+            </div>
+        </div>
+
+        <div class="card dashboard-card clickable-card kpi-card" onclick="openModal('soh')" title="Κλικ για γράφημα">
+            <div class="chart-label">State of Health (SoH)</div>
+            <div id="sohValue" class="display-number text-purple">--%</div>
+            <div class="progress-bar-bg">
+                <div id="sohBar" class="progress-bar-fill" style="background-color: #9B59B6; width: 0%;"></div>
+            </div>
+=======
     <div class="charts-row-2">
-        <!-- Γράφημα: SoC (%) -->
         <div class="card dashboard-card clickable-card" onclick="openModal('soc')">
             <canvas id="socChart"></canvas>
         </div>
-        <!-- Γράφημα: SoH (%) -->
         <div class="card dashboard-card clickable-card" onclick="openModal('soh')">
             <canvas id="sohChart"></canvas>
+>>>>>>> 5a92e0d37ec5761cd9b8a5982f520ba30387a363
+        </div>
+
+        <div class="card dashboard-card clickable-card kpi-card" onclick="openModal('power')" title="Κλικ για γράφημα">
+            <div class="chart-label">Power (W)</div>
+            <div id="powerValue" class="display-number text-warning">-- W</div>
         </div>
 
     </div>

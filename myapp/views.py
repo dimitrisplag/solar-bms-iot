@@ -154,22 +154,21 @@ def receive_sensor_data(request):
             current_voltage = float(data.get('voltage'))
             current_amps = float(data.get('current'))
             current_temp = float(data.get('temperature'))
-            
+            power_watts = current_voltage * current_amps    
             now = timezone.now()
             
             # --- ΥΠΟΛΟΓΙΣΜΟΣ SoC & SoH (Coulomb Counting) ---
-            last_measurement = Measurement.objects.filter(device=device).first()
-            
+            last_measurement = Measurement.objects.filter(device=device).order_by('-timestamp').first()            
             new_soc = 100.0 
             new_soh = 100.0 
             
             if last_measurement and last_measurement.soc is not None:
                 time_diff_seconds = (now - last_measurement.timestamp).total_seconds()
                 time_diff_hours = time_diff_seconds / 3600.0
+                battery_capacity = getattr(device, 'capacity_ah', 100.0)
+                delta_soc = ((current_amps * time_diff_hours) / battery_capacity) * 100
                 
-                delta_soc = ((current_amps * time_diff_hours) / BATTERY_CAPACITY_AH) * 100
-                
-                new_soc = last_measurement.soc + delta_soc
+                new_soc = last_measurement.soc -delta_soc
                 new_soc = max(0.0, min(100.0, new_soc)) 
                 new_soh = last_measurement.soh if last_measurement.soh else 100.0
             
@@ -178,6 +177,7 @@ def receive_sensor_data(request):
                 device=device,
                 voltage=current_voltage,
                 current=current_amps,
+                watt=power_watts,
                 temperature=current_temp,
                 soc=round(new_soc, 3), 
                 soh=round(new_soh, 2)  

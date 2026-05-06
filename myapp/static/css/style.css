@@ -458,3 +458,36 @@ button:hover { background-color: #00B4D8; }
 .btn-action:hover {
     background-color: #00B4D8;
 }
+.kpi-card {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 30px 20px;
+    }
+    .chart-label {
+        font-size: 1.2rem;
+        color: #B0B0B0;
+        margin-bottom: 10px;
+    }
+    .display-number {
+        font-size: 3rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+    }
+    .text-success { color: #2ECC71; }
+    .text-purple { color: #9B59B6; }
+    .text-warning { color: #F1C40F; }
+    
+    .progress-bar-bg {
+        width: 80%;
+        height: 8px;
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 5px;
+        overflow: hidden;
+    }
+    .progress-bar-fill {
+        height: 100%;
+        transition: width 0.5s ease-in-out;
+    }
