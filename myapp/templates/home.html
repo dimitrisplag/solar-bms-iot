@@ -44,16 +44,30 @@
             <canvas id="tempChart"></canvas>
         </div>
     </div>
-    <div class="charts-row-2">
-        <!-- Γράφημα: SoC (%) -->
-        <div class="card dashboard-card clickable-card" onclick="openModal('soc')">
-            <canvas id="socChart"></canvas>
+    <div class="charts-row-3"> 
+        <div class="card dashboard-card clickable-card kpi-card" onclick="openModal('soc')" title="Κλικ για γράφημα">
+            <div class="chart-label">State of Charge (SoC)</div>
+            <div id="socValue" class="display-number text-success">--%</div>
+            <div class="progress-bar-bg">
+                <div id="socBar" class="progress-bar-fill" style="background-color: #2ECC71; width: 0%;"></div>
+            </div>
         </div>
-        <!-- Γράφημα: SoH (%) -->
-        <div class="card dashboard-card clickable-card" onclick="openModal('soh')">
-            <canvas id="sohChart"></canvas>
+
+        <div class="card dashboard-card clickable-card kpi-card" onclick="openModal('soh')" title="Κλικ για γράφημα">
+            <div class="chart-label">State of Health (SoH)</div>
+            <div id="sohValue" class="display-number text-purple">--%</div>
+            <div class="progress-bar-bg">
+                <div id="sohBar" class="progress-bar-fill" style="background-color: #9B59B6; width: 0%;"></div>
+            </div>
         </div>
+
+        <div class="card dashboard-card clickable-card kpi-card" onclick="openModal('power')" title="Κλικ για γράφημα">
+            <div class="chart-label">Power (W)</div>
+            <div id="powerValue" class="display-number text-warning">-- W</div>
+        </div>
+
     </div>
+    
 
 </div>
 <div id="chartModal" class="modal">
@@ -76,8 +90,8 @@
     const tempData = JSON.parse('{{ temp_data|safe }}');
     const socData = JSON.parse('{{ soc_data|safe }}');
     const sohData = JSON.parse('{{ soh_data|safe }}');
+    const powerData = voltageData.map((volts, index) => volts * currentData[index]);
     
-// 2. Ρυθμίσεις για το Dark Theme
     Chart.defaults.color = '#E0E0E0'; 
     Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.1)'; 
 
@@ -92,15 +106,22 @@
 
     new Chart(document.getElementById('tempChart').getContext('2d'), {
         type: 'line', data: { labels: labels, datasets: [{ label: 'Θερμοκρασία (°C)', data: tempData, borderColor: '#E74C3C', backgroundColor: 'rgba(231, 76, 60, 0.2)', borderWidth: 2, fill: true, tension: 0.4 }] }
-    });
+    }); 
+    if (socData.length > 0) {
+        // Παίρνουμε την τελευταία τιμή κάθε λίστας
+        const latestSoC = socData[socData.length - 1];
+        const latestSoH = sohData[sohData.length - 1];
+        const latestPower = powerData[powerData.length - 1];
 
-    new Chart(document.getElementById('socChart').getContext('2d'), {
-        type: 'line', data: { labels: labels, datasets: [{ label: 'State of Charge (SoC %)', data: socData, borderColor: '#2ECC71', backgroundColor: 'rgba(46, 204, 113, 0.2)', borderWidth: 2, fill: true, tension: 0.4 }] }, options: { scales: { y: { min: 0, max: 100 } } }
-    });
+        // Γράφουμε τα νούμερα στην HTML
+        document.getElementById('socValue').innerText = latestSoC.toFixed(1) + '%';
+        document.getElementById('sohValue').innerText = latestSoH.toFixed(1) + '%';
+        document.getElementById('powerValue').innerText = latestPower.toFixed(1) + ' W';
 
-    new Chart(document.getElementById('sohChart').getContext('2d'), {
-        type: 'line', data: { labels: labels, datasets: [{ label: 'State of Health (SoH %)', data: sohData, borderColor: '#9B59B6', backgroundColor: 'rgba(155, 89, 182, 0.2)', borderWidth: 2, fill: true, tension: 0.4 }] }, options: { scales: { y: { min: 0, max: 100 } } }
-    });
+        // Γεμίζουμε τις μπάρες (προαιρετικό εφέ)
+        document.getElementById('socBar').style.width = latestSoC + '%';
+        document.getElementById('sohBar').style.width = latestSoH + '%';
+    }
 
     // 4. Λειτουργία Pop-up (Modal)
     let modalChartInstance = null;
@@ -120,7 +141,7 @@
         else if (chartType === 'temp') { mLabel = 'Θερμοκρασία (°C)'; mData = tempData; mBorder = '#E74C3C'; mBg = 'rgba(231, 76, 60, 0.2)'; }
         else if (chartType === 'soc') { mLabel = 'SoC (%)'; mData = socData; mBorder = '#2ECC71'; mBg = 'rgba(46, 204, 113, 0.2)'; isPercentage = true; }
         else if (chartType === 'soh') { mLabel = 'SoH (%)'; mData = sohData; mBorder = '#9B59B6'; mBg = 'rgba(155, 89, 182, 0.2)'; isPercentage = true; }
-
+        else if (chartType === 'power') { mLabel = 'Ισχύς (W)'; mData = powerData; mBorder = '#F1C40F'; mBg = 'rgba(241, 196, 15, 0.2)'; isPercentage = false; }
         modalChartInstance = new Chart(document.getElementById('modalCanvas').getContext('2d'), {
             type: 'line',
             data: { labels: labels, datasets: [{ label: mLabel, data: mData, borderColor: mBorder, backgroundColor: mBg, borderWidth: 3, fill: true, tension: 0.4 }] },
