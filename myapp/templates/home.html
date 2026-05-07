@@ -88,7 +88,7 @@
     const tempData = JSON.parse('{{ temp_data|safe }}');
     const socData = JSON.parse('{{ soc_data|safe }}');
     const sohData = JSON.parse('{{ soh_data|safe }}');
-    const powerData = voltageData.map((volts, index) => volts * currentData[index]);
+    const powerData = JSON.parse('{{ power_data|safe }}');
     
     Chart.defaults.color = '#E0E0E0'; 
     Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.1)'; 

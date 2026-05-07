@@ -27,9 +27,7 @@ class Measurement(models.Model):
     temperature = models.FloatField(verbose_name="Θερμοκρασία (°C)")
     soc = models.FloatField(verbose_name="State of Charge (%)", null=True, blank=True)  
     soh = models.FloatField(verbose_name="State of Health (%)", null=True, blank=True)  
-    
-    # (Προαιρετικό) Αν θέλεις να αποθηκεύεις και την ισχύ
-    # power = models.FloatField(verbose_name="Ισχύς (W)", null=True, blank=True)
+    power = models.FloatField(verbose_name="Ισχύς (W)", null=True, blank=True)
 
     class Meta:
         # Αυτό λέει στη βάση να φέρνει πάντα τα δεδομένα ταξινομημένα από το πιο πρόσφατο στο πιο παλιό

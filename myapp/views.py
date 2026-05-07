@@ -31,7 +31,7 @@ def home(request):
         # Αλλιώς, πάρε την πρώτη από προεπιλογή (όπως έκανε πριν)
         device = user_devices.first()
 
-    timestamps, soc_data, soh_data, voltage_data, current_data, temp_data = [], [], [], [], [], []   
+    timestamps, soc_data, soh_data, voltage_data, current_data, temp_data, power_data = [], [], [], [], [], [], []
     
     if device:
         # Φέρνουμε τις τελευταίες 20 μετρήσεις και τις βάζουμε σε χρονολογική σειρά
@@ -44,6 +44,7 @@ def home(request):
             voltage_data.append(m.voltage)
             current_data.append(m.current)
             temp_data.append(m.temperature)
+            power_data.append(m.power if m.power is not None else 0)
 
     context = {
         'devices': user_devices,
@@ -53,6 +54,7 @@ def home(request):
         'soh_data': json.dumps(soh_data),
         'voltage_data': json.dumps(voltage_data),
         'current_data': json.dumps(current_data),
+        'power_data': json.dumps(power_data),
         'temp_data': json.dumps(temp_data),
     }
     
@@ -177,7 +179,7 @@ def receive_sensor_data(request):
                 device=device,
                 voltage=current_voltage,
                 current=current_amps,
-                watt=power_watts,
+                watt=round(power_watts, 2),
                 temperature=current_temp,
                 soc=round(new_soc, 3), 
                 soh=round(new_soh, 2)  

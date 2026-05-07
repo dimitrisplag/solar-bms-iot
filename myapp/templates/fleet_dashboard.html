@@ -53,6 +53,7 @@
                     <th>SoC (%)</th>
                     <th>Voltage (V)</th>
                     <th>Temperature (°C)</th>
+                    <th>Watts</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -90,6 +91,10 @@
 
                     <td class="{% if item.latest.temperature > 45 %}text-danger{% endif %}">
                         {% if item.latest %}{{ item.latest.temperature }}°C{% else %}-{% endif %}
+                    </td>
+
+                    <td>
+                        {% if item.latest %}{{ item.latest.power }} W{% else %}-{% endif %}
                     </td>
 
                     <td>
